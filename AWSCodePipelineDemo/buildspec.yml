@@ -7,12 +7,14 @@ phases:
       - export DOTNET_ROOT="$HOME/.dotnet"
   build:
     commands:
-      # Команда publish автоматично робить і restore, і build
-      - dotnet publish -c Release -o ./publish_output AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
+      # Збираємо як Self-Contained для Linux 64-bit (разом із середовищем .NET 9)
+      - dotnet publish -c Release -r linux-x64 --self-contained true -o ./publish_output AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
   post_build:
     commands:
-      # Створюємо Procfile у папці з готовим кодом і примусово задаємо порт 5000
-      - echo "web: dotnet AWSCodePipelineDemo.dll --urls http://0.0.0.0:5000" > ./publish_output/Procfile
+      # Надаємо згенерованому файлу права на виконання в системі Linux
+      - chmod +x ./publish_output/AWSCodePipelineDemo
+      # Procfile тепер запускає бінарник напряму, а не через dotnet
+      - echo "web: ./AWSCodePipelineDemo --urls http://0.0.0.0:5000" > ./publish_output/Procfile
 artifacts:
   files:
     - '**/*'
