@@ -15,6 +15,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Наш ендпоінт для перевірки
-app.MapGet("/", () => "Hello World! .NET 10 on Debian");
+app.MapGet("/", () => "Hello World v2!");
 
 app.Run();
