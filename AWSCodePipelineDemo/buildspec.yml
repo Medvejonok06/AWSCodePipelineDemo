@@ -7,12 +7,13 @@ phases:
       - export DOTNET_ROOT="$HOME/.dotnet"
   build:
     commands:
-      - dotnet restore AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
-      - dotnet build AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
+      # Команда publish автоматично робить і restore, і build
+      - dotnet publish -c Release -o ./publish_output AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
   post_build:
     commands:
-      - dotnet publish -c Release -o ./app/ AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
+      # Створюємо Procfile у папці з готовим кодом і примусово задаємо порт 5000
+      - echo "web: dotnet AWSCodePipelineDemo.dll --urls http://0.0.0.0:5000" > ./publish_output/Procfile
 artifacts:
   files:
     - '**/*'
-  base-directory: app
+  base-directory: publish_output
