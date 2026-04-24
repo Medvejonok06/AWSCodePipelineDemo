@@ -1,25 +1,24 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(); // ЗМІНЕНО ТУТ
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();   // ЗМІНЕНО ТУТ
+    app.UseSwaggerUI(); // ЗМІНЕНО ТУТ
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
-app.MapGet("/", () => "Hello World! .NET 9 on Debian");
+// Наш тестовий ендпоінт
+app.MapGet("/", () => "Hello World! .NET 8 on Debian");
 
 app.Run();

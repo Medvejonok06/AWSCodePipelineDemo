@@ -1,21 +1,15 @@
 version: 0.2
 phases:
   install:
-    commands:
-      - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
-      - export PATH="$PATH:$HOME/.dotnet"
-      - export DOTNET_ROOT="$HOME/.dotnet"
+    runtime-versions:
+      dotnet: 8.0
   build:
     commands:
-      # Збираємо як Self-Contained для Linux 64-bit (разом із середовищем .NET 9)
-      - dotnet publish -c Release -r linux-x64 --self-contained true -o ./publish_output AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
+      - dotnet publish -c Release -o ./app AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
   post_build:
     commands:
-      # Надаємо згенерованому файлу права на виконання в системі Linux
-      - chmod +x ./publish_output/AWSCodePipelineDemo
-      # Procfile тепер запускає бінарник напряму, а не через dotnet
-      - echo "web: ./AWSCodePipelineDemo --urls http://0.0.0.0:5000" > ./publish_output/Procfile
+      - echo "web: dotnet AWSCodePipelineDemo.dll" > ./app/Procfile
 artifacts:
   files:
     - '**/*'
-  base-directory: publish_output
+  base-directory: app
