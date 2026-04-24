@@ -8,7 +8,8 @@ phases:
       - dotnet publish -c Release -o ./app AWSCodePipelineDemo/AWSCodePipelineDemo.csproj
   post_build:
     commands:
-      - echo "web: dotnet AWSCodePipelineDemo.dll" > ./app/Procfile
+      - |
+        echo "web: dotnet AWSCodePipelineDemo.dll" > ./app/Procfile
 artifacts:
   files:
     - '**/*'
