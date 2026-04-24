@@ -2,9 +2,7 @@ version: 0.2
 phases:
   install:
     commands:
-      # Завантажуємо та встановлюємо .NET 9 вручну за допомогою офіційного скрипта Microsoft
       - curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
-      # Додаємо встановлений .NET до змінних середовища
       - export PATH="$PATH:$HOME/.dotnet"
       - export DOTNET_ROOT="$HOME/.dotnet"
   build:
@@ -17,3 +15,4 @@ phases:
 artifacts:
   files:
     - '**/*'
+  base-directory: app
